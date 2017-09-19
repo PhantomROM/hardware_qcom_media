@@ -36,8 +36,9 @@ ifeq ($(TARGET_USES_ION),true)
 libmm-venc-def += -DUSE_ION
 endif
 
-venc-inc       := $(TARGET_OUT_INTERMEDIATES)/KERNEL_OBJ/usr/include
-
+ifeq ($(TARGET_USES_MEDIA_EXTENSIONS),true)
+libmm-venc-def += -DUSE_NATIVE_HANDLE_SOURCE
+endif
 libmm-venc-def += -D_ANDROID_ICS_
 # ---------------------------------------------------------------------------------
 # 			Make the Shared library (libOmxVenc)
@@ -47,14 +48,14 @@ include $(CLEAR_VARS)
 
 libmm-venc-inc      := $(LOCAL_PATH)/venc/inc
 libmm-venc-inc      += $(OMX_VIDEO_PATH)/vidc/common/inc
-libmm-venc-inc      += hardware/qcom/media/msm8974/mm-core/inc
-libmm-venc-inc      += hardware/qcom/media/msm8974/libstagefrighthw
+libmm-venc-inc      += $(call project-path-for,qcom-media)/mm-core/inc
+libmm-venc-inc      += $(call project-path-for,qcom-media)/libstagefrighthw
 libmm-venc-inc      += $(TARGET_OUT_HEADERS)/qcom/display
 libmm-venc-inc      += $(TARGET_OUT_HEADERS)/adreno
 libmm-venc-inc      += $(TARGET_OUT_HEADERS)/adreno200
 libmm-venc-inc      += frameworks/native/include/media/hardware
 libmm-venc-inc      += frameworks/native/include/media/openmax
-libmm-venc-inc      += hardware/qcom/media/msm8974/libc2dcolorconvert
+libmm-venc-inc      += $(call project-path-for,qcom-media)/libc2dcolorconvert
 libmm-venc-inc      += frameworks/av/include/media/stagefright
 libmm-venc-inc      += $(venc-inc)
 
@@ -89,7 +90,7 @@ include $(CLEAR_VARS)
 mm-venc-test720p-inc            := $(TARGET_OUT_HEADERS)/mm-core
 mm-venc-test720p-inc            += $(LOCAL_PATH)/venc/inc
 mm-venc-test720p-inc            += $(OMX_VIDEO_PATH)/vidc/common/inc
-mm-venc-test720p-inc            += hardware/qcom/media/msm8974/mm-core/inc
+mm-venc-test720p-inc            += $(call project-path-for,qcom-media)/mm-core/inc
 mm-venc-test720p-inc            += $(TARGET_OUT_HEADERS)/qcom/display
 mm-venc-test720p-inc            += $(venc-inc)
 
@@ -120,7 +121,7 @@ venc-test-inc                   += $(venc-inc)
 LOCAL_MODULE                    := mm-video-encdrv-test
 LOCAL_MODULE_TAGS               := optional
 LOCAL_C_INCLUDES                := $(venc-test-inc)
-LOCAL_C_INCLUDES                += hardware/qcom/media/msm8974/mm-core/inc
+LOCAL_C_INCLUDES                += $(call project-path-for,qcom-media)/mm-core/inc
 
 
 LOCAL_SRC_FILES                 := venc/test/video_encoder_test.c
